@@ -1,12 +1,6 @@
-import {
-  description,
-  program,
-  requiredArg,
-  usage,
-  version,
-} from 'commander-ts';
+import { description, program, requiredArg, usage, version } from "commander-ts";
 // @ts-ignore
-import * as tr from 'tor-request';
+import * as tr from "tor-request";
 
 export interface IPwnDbResult {
   domain: string;
@@ -15,82 +9,100 @@ export interface IPwnDbResult {
 }
 
 @program()
-@version('1.0.0')
+@version("1.0.0")
 @description(
-  'Query the PwnDb2 Hidden Tor service in order to find leaked password for email or domain.'
+  "Query the PwnDb2 Hidden Tor service in order to find leaked password for email or domain."
 )
-@usage('--help')
+@usage("--help")
 export class PwnDb2 {
-  constructor() {}
+  constructor() {
+  }
 
-  public run(@requiredArg('emailOrDomain') emailOrDomain: string) {
-    let queryUsername: string = '';
-    let queryDomain: string = '';
+  public run(@requiredArg("emailOrDomain") emailOrDomain: string) {
+    const pwnResults: IPwnDbResult[] = [];
+
+    let queryUsername: string = "";
+    let queryDomain: string = "";
 
     if (emailOrDomain) {
-      if (emailOrDomain.indexOf('@') > -1) {
-        queryUsername = emailOrDomain.split('@')[0];
-        queryDomain = emailOrDomain.split('@')[1];
-        if (!queryUsername) {
-          queryUsername = '%';
-        }
+      // Filtering Inputs
+      if (emailOrDomain.indexOf("@") > -1) {
+        queryUsername = emailOrDomain.split("@")[0]
+          ? emailOrDomain.split("@")[0]
+          : "%";
+        queryDomain = emailOrDomain.split("@")[1];
       }
+
+      // Query Tor Hidden Service
       tr.request(
-        'http://pwndb2am4tzkvold.onion',
+        "http://pwndb2am4tzkvold.onion",
         {
-          method: 'POST',
+          method: "POST",
           qs: {
             domain: queryDomain,
             domainopr: 1,
             luser: queryUsername,
             luseropr: 1,
-            submitform: 'em',
-          },
+            submitform: "em"
+          }
         },
         (err: any, res: any, body: any) => {
           if (!err && res.statusCode === 200) {
-            const pwnResults: IPwnDbResult[] = [];
-
             if (body) {
-              const leaks: string[] = body.toString().split('Array');
-              let username: string;
-              let domain: string;
-              let password: string;
+              // Parse HTML response
+              const leaks: string[] = body.toString().split("Array");
 
               for (let leak of leaks) {
-                leak = leak.toLowerCase();
                 try {
+                  let username: string;
+                  let domain: string;
+                  let password: string;
+                  leak = leak.toLowerCase();
                   username = leak
-                    .split('[luser] =>')[1]
-                    .split('[')[0]
+                    .split("[luser] =>")[1]
+                    .split("[")[0]
                     .trim();
                   domain = leak
-                    .split('[domain] =>')[1]
-                    .split('[')[0]
+                    .split("[domain] =>")[1]
+                    .split("[")[0]
                     .trim();
                   password = leak
-                    .split('[password] =>')[1]
-                    .split(')')[0]
+                    .split("[password] =>")[1]
+                    .split(")")[0]
                     .trim();
 
                   if (username) {
                     pwnResults.push({
                       domain,
                       password,
-                      username,
+                      username
                     });
                   }
-                } catch (e) {}
+                } catch (e) {
+                }
               }
             }
-
-            if (pwnResults && pwnResults.length > 0) {
-              console.log('You have been pwned... :(');
-              console.log(pwnResults);
-            } else {
-              console.log('No leak found for this query... :)');
-            }
           }
+
+          // Forge Response
+          const response = {
+            count: pwnResults.length,
+            input: {
+              domain: queryDomain,
+              username: queryUsername
+            },
+            message:
+              pwnResults.length > 0
+                ? "You have been pwned... :("
+                : "No leak found for this query... :)",
+            status: {
+              code: res.statusCode,
+              error: err ? err : ""
+            }
+          };
+
+          // Output in console
+          console.log(JSON.stringify(response));
         }
       );
     }
