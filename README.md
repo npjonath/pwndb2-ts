@@ -21,9 +21,45 @@ Warning : Please use it only for checking your own security. Trying to get leake
 
 # Output 
 
+> On Success
 ```
-[ { domain: 'domain.com',
-    password: '***********',
-    username: 'npjonath' } ]
+{
+	"count": 2,
+	"inputs": {
+		"domain": "pwndomain.com",
+		"username": "%"
+	},
+	"message": "You have been pwned... :(",
+	"outputs": [{
+		"domain": "pwndomain.com",
+		"password": "1234",
+		"username": "test"
+	},{
+    "domain": "pwndomain.com",
+    "password": "ABCDE",
+    "username": "test2"
+  }],
+	"status": {
+		"code": 200,
+		"error": ""
+	}
+}
+
+```
+> On Error
+```
+{
+	"count": 0,
+	"inputs": {
+		"domain": "notpwndomain.com",
+		"username": "test"
+	},
+	"message": "No leak found for this query... :)",
+	"outputs": [],
+	"status": {
+		"code": 200,
+		"error": ""
+	}
+}
 
 ```
