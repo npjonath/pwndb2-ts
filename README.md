@@ -1,9 +1,19 @@
 
 # What is it ?
 
-A Typescript commander interface for querying PwnDB 2 Tor Hidden service for leaked password.
-Warning : Please use it only for checking your own security. Trying to get leaked password on domain or email you do not own is illegal.
+A Typescript CLI utility for searching in the PwnDB 2 Tor Hidden service database for leaked password.
+Warning : Trying to get leaked password on domain or email you do not own is illegal.
 
+# Goal
+
+ [x] Filtering Inputs args
+ 
+ [x] Make http request through TOR Protocol
+ 
+ [x] Extract Data from RAW Html response
+ 
+ [x] Forge JSON response
+ 
 # How to install ?
  >1 - Install [Tor Service](https://www.torproject.org/docs/debian.html.en)
  >
