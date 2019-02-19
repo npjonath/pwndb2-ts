@@ -1,0 +1,8 @@
+{
+  "no-console": false,
+  "no-empty": false,
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier"
+  ]
+}

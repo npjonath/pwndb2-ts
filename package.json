@@ -1,0 +1,62 @@
+{
+  "name": "pwndb2js",
+  "version": "1.0.0",
+  "description": "pwndbjs",
+  "license": "MIT",
+  "repository": "",
+  "author": {
+    "name": "jonathan jot",
+    "email": "jonathan.jot@talktech.fr",
+    "url": "talktech.fr"
+  },
+  "keywords": [
+    "pwndb2",
+    "leak",
+    "pwndb",
+    "password"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index",
+  "types": "lib/index",
+  "scripts": {
+    "clean": "rimraf lib && rimraf coverage",
+    "format": "prettier --write \"{src,__tests__}/**/*.ts\" --single-quote --trailing-comma es5",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build",
+    "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
+    "build": "tsc --pretty",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "watch": "npm run build -- --watch",
+    "watch:test": "jest --watch"
+  },
+  "dependencies": {
+    "@types/request": "^2.48.1",
+    "commander": "^2.19.0",
+    "commander-ts": "^0.1.5",
+    "reflect-metadata": "^0.1.13",
+    "request": "^2.88.0",
+    "tor-request": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.3",
+    "@types/node": "^10.11.4",
+    "coveralls": "^3.0.2",
+    "jest": "^23.6.0",
+    "prettier": "^1.14.3",
+    "rimraf": "^2.6.2",
+    "ts-jest": "^23.10.3",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  }
+}
