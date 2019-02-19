@@ -34,11 +34,11 @@ Warning : Please use it only for checking your own security. Trying to get leake
 		"domain": "pwndomain.com",
 		"password": "1234",
 		"username": "test"
-	},{
-    "domain": "pwndomain.com",
-    "password": "ABCDE",
-    "username": "test2"
-  }],
+	}, {
+		"domain": "pwndomain.com",
+		"password": "ABCDE",
+		"username": "test2"
+	}],
 	"status": {
 		"code": 200,
 		"error": ""
